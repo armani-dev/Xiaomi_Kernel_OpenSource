@@ -11,18 +11,18 @@
  * GNU General Public License for more details.
  */
 
-/include/ "msm8226-camera-sensor-h2a.dtsi"
+/include/ "msm8226-camera-sensor-h3lte.dtsi"
 
 &soc {
 	serial@f991f000 {
 		status = "ok";
 	};
 
-    w1-gpio {
-            compatible = "qcom,w1-gpio";
-            qcom,gpio-pin = <567>; /* BAT_ID Connects to mpp-8*/
-            qcom,is-open-drain = <0>;
-    };
+	w1-gpio {
+		compatible = "qcom,w1-gpio";
+		qcom,gpio-pin = <439>; /* BAT_ID Connects to pm8226-mpp8*/
+		qcom,is-open-drain = <0>;
+	};
 
 	i2c@f9927000 { /* BLSP1 QUP5 */
 		synaptics@20 {
@@ -60,9 +60,78 @@
 			ist30xx,cfg_0 {
 				ist30xx,tsp-type = <0x0f>;
 				ist30xx,tsp-name = "WINTEK";
-				ist30xx,key-code = <139 102 158>;
-				ist30xx,cfg-name = "config.fw";
-				ist30xx,fw-name = "ist30xx_firmware.fw";
+				ist30xx,key-code = <158 102 139>;
+				ist30xx,cmcs-name = "ist30xx_wintek.cms";
+				ist30xx,fw-name = "ist30xx_wintek.fw";
+			};
+		};
+
+		atmel_mxt_ts@4a {
+			compatible = "atmel,mxt-ts";
+			reg = <0x4a>;
+			interrupt-parent = <&msmgpio>;
+			interrupts = <17 0x2>;
+			vdd-supply = <&pm8226_l19>;
+			atmel,i2c-pull-up;
+			atmel,irqflags = <0x2008>;
+			atmel,reset-gpio = <&msmgpio 16 0x00>;
+			atmel,irq-gpio = <&msmgpio 17 0x00>;
+			atmel,mxt-fw-name = "mxT336SC21.fw";
+			atmel,gpio-mask = <0x0C>;
+			atmel,rx-num = <13>;
+			atmel,tx-num = <24>;
+			atmel,config-array-size = <1>;
+			atmel,cfg_1 {
+				atmel,family-id = <0x82>;
+				atmel,variant-id = <0x23>;
+				atmel,version = <0x21>;
+				atmel,build = <0xAA>;
+				atmel,mxt-cfg-name = "mxt_336s_config.fw";
+				atmel,vendor-id = <0x0C>;
+				atmel,key-codes = <139 102 158>;
+				atmel,key-num = <3>;
+				atmel,mult-no-touch-threshold = <70>;
+			};
+		};
+
+		atmel_mxt_ts@4b {
+			compatible = "atmel,mxt-ts";
+			reg = <0x4b>;
+			interrupt-parent = <&msmgpio>;
+			interrupts = <17 0x2008>;
+			vdd-supply = <&pm8226_l19>;
+			atmel,i2c-pull-up;
+			atmel,irqflags = <0x2008>;
+			atmel,reset-gpio = <&msmgpio 16 0x00>;
+			atmel,irq-gpio = <&msmgpio 17 0x00>;
+			atmel,mxt-fw-name = "mxT336SC21.fw";
+			atmel,gpio-mask = <0x0C>;
+			atmel,config-array-size = <2>;
+			atmel,rx-num = <13>;
+			atmel,tx-num = <24>;
+			atmel,ref-diff-threshold = <400>;
+			atmel,ref-diff-halfline-threshold = <500>;
+			atmel,cfg_1 {
+				atmel,family-id = <0x82>;
+				atmel,variant-id = <0x23>;
+				atmel,version = <0x21>;
+				atmel,build = <0xAA>;
+				atmel,mxt-cfg-name = "mxt_336s_ofilm_config.fw";
+				atmel,vendor-id = <0x0>;
+				atmel,key-codes = <139 102 158>;
+				atmel,key-num = <3>;
+				atmel,mult-no-touch-threshold = <70>;
+			};
+			atmel,cfg_2 {
+				atmel,family-id = <0x82>;
+				atmel,variant-id = <0x23>;
+				atmel,version = <0x21>;
+				atmel,build = <0xAA>;
+				atmel,mxt-cfg-name = "mxt_336s_gis_config.fw";
+				atmel,vendor-id = <0x08>;
+				atmel,key-codes = <139 102 158>;
+				atmel,key-num = <3>;
+				atmel,mult-no-touch-threshold = <70>;
 			};
 		};
 
@@ -84,57 +153,49 @@
 			ft5x06_i2c,landing-jiffies = <1000>;
 			ft5x06_i2c,landing-threshold = <16>;
 			ft5x06_i2c,staying-threshold = <8>;
-			ft5x06_i2c,tx-num = <24>;
-			ft5x06_i2c,rx-num = <13>;
 			ft5x06_i2c,raw-min = <7000>;
 			ft5x06_i2c,raw-max = <10000>;
-			ft5x06_i2c,firmware-array-size = <4>;
+			ft5x06_i2c,firmware-array-size = <1>;
 			ft5x06_i2c,cfg_0 {
-				ft5x06_i2c,chip = <0x0A>;
-				ft5x06_i2c,vendor = <0x51>;
-				ft5x06_i2c,fw-name = "ft5316_firmware.fw";
-				ft5x06_i2c,key-menu = <155 1317 10 50>;
-				ft5x06_i2c,key-home = <355 1317 10 50>;
-				ft5x06_i2c,key-back = <565 1317 10 50>;
-				ft5x06_i2c,key-length = <3>;
-				ft5x06_i2c,key-map = <139 102 158>;
-				ft5x06_i2c,key-pos = <2 6 10>;
-			};
-			ft5x06_i2c,cfg_1 {
-				ft5x06_i2c,chip = <0x14>;
-				ft5x06_i2c,vendor = <0x51>;
-				ft5x06_i2c,fw-name = "ft5336_firmware_ofilm.fw";
-				ft5x06_i2c,key-menu = <155 1319 10 50>;
-				ft5x06_i2c,key-home = <355 1319 10 50>;
-				ft5x06_i2c,key-back = <565 1319 10 50>;
-				ft5x06_i2c,key-length = <3>;
-				ft5x06_i2c,key-map = <139 102 158>;
-				ft5x06_i2c,key-pos = <2 6 10>;
-			};
-			ft5x06_i2c,cfg_2 {
-				ft5x06_i2c,chip = <0x14>;
-				ft5x06_i2c,vendor = <0x89>;
-				ft5x06_i2c,fw-name = "ft5336_firmware_wintek.fw";
-				ft5x06_i2c,key-menu = <155 1319 10 50>;
-				ft5x06_i2c,key-home = <355 1319 10 50>;
-				ft5x06_i2c,key-back = <565 1319 10 50>;
-				ft5x06_i2c,key-length = <3>;
-				ft5x06_i2c,key-map = <139 102 158>;
-				ft5x06_i2c,key-pos = <2 6 10>;
-			};
-			ft5x06_i2c,cfg_3 {
 				ft5x06_i2c,chip = <0x14>;
 				ft5x06_i2c,vendor = <0x3B>;
-				ft5x06_i2c,fw-name = "ft5336_firmware_biel.fw";
-				ft5x06_i2c,key-menu = <155 1319 10 50>;
-				ft5x06_i2c,key-home = <355 1319 10 50>;
-				ft5x06_i2c,key-back = <565 1319 10 50>;
+				ft5x06_i2c,fw-name = "ft5336_firmware.fw";
+				ft5x06_i2c,key-menu = <115 1317 10 50>;
+				ft5x06_i2c,key-home = <355 1317 10 50>;
+				ft5x06_i2c,key-back = <595 1317 10 50>;
 				ft5x06_i2c,key-length = <3>;
 				ft5x06_i2c,key-map = <139 102 158>;
 				ft5x06_i2c,key-pos = <2 6 10>;
+				ft5x06_i2c,tx-num = <24>;
+				ft5x06_i2c,rx-num = <13>;
 			};
-
 		};
+	};
+
+	i2c@f9928000 { /* BLSP1 QUP6 */
+		lm3533@38 {
+                        compatible = "ti,lm3533";
+                        reg = <0x38>;
+                        lm3533,hwen-gpio = <&msmgpio 4 0x00>;
+                        lm3533,boost_ovp = <3>;  /* 40v */
+                        lm3533,boost_freq = <0>;  /* 500k */
+                        lm3533,num_backlights = <1>;
+                        lm3533,num_leds = <1>;
+                        lm3533,backlight_0 {
+                                lm3533,name = "lm3533-backlight0";
+                                lm3533,bl-max-current = <19400>;
+                                lm3533,bl-def-brightness = <130>;
+                                lm3533,bl-pwm = <0x01>;
+                                lm3533,bl-linear = <1>;
+                        };
+
+                        lm3533,led_0 {
+                                lm3533,name = "button-backlight";
+                                lm3533,led-max-current = <5000>;
+                                lm3533,led-pwm = <0x00>;
+                        };
+
+                };
 	};
 
 	gen-vkeys {
@@ -180,19 +241,6 @@
 		};
 	};
 
-	spi@f9923000 {
-		ethernet-switch@3 {
-			compatible = "micrel,ks8851";
-			reg = <3>;
-			interrupt-parent = <&msmgpio>;
-			interrupts = <115 0x8>;
-			spi-max-frequency = <4800000>;
-			rst-gpio = <&msmgpio 114 0>;
-			vdd-io-supply = <&pm8226_lvs1>;
-			vdd-phy-supply = <&pm8226_lvs1>;
-		};
-	};
-
 	sound {
 		qcom,audio-routing =
 			"RX_BIAS", "MCLK",
@@ -211,6 +259,7 @@
 		qcom,cdc-mclk-gpios = <&pm8226_gpios 1 0>;
 		qcom,cdc-vdd-spkr-gpios = <&pm8226_gpios 2 0>;
 		qcom,cdc-us-euro-gpios = <&msmgpio 69 0>;
+		qcom,headset-jack-type-NC;
 	};
 
 };
@@ -382,10 +431,10 @@
 				qcom,start-idx = <1>;
 				qcom,ramp-step-ms = <48>;
 	                        qcom,duty-pcts = [00 00 00 01 01 02 03 04 05 06 07 09 10
-         		                          12 13 15 16 18 19 21 22 24 25 26 27
-               	        		          28 28 29 29 30 30 30 29 29 28 28 27
+		                                  12 13 15 16 18 19 21 22 24 25 26 27
+		                                  28 28 29 29 30 30 30 29 29 28 28 27
 		                                  26 25 24 22 21 19 18 16 15 13 12 10
-                		                  09 07 06 05 04 03 02 01 01 00 00];
+		                                  09 07 06 05 04 03 02 01 01 00 00];
 				qcom,use-blink;
 			};
 		};
@@ -409,8 +458,8 @@
 	                        qcom,duty-pcts = [00 00 00 01 01 02 03 04 05 06 07 09 10
 		                                  12 13 15 16 18 19 21 22 24 25 26 27
 		                                  28 28 29 29 30 30 30 29 29 28 28 27
-                		                  26 25 24 22 21 19 18 16 15 13 12 10
-                                		  09 07 06 05 04 03 02 01 01 00 00];
+		                                  26 25 24 22 21 19 18 16 15 13 12 10
+		                                  09 07 06 05 04 03 02 01 01 00 00];
 				qcom,use-blink;
 			};
 		};
@@ -429,7 +478,6 @@
 				linux,default-trigger = "bkl-trigger";
 				qcom,cs-out-en;
 				qcom,op-fdbck = <1>;
-				qcom,cabc-en;
 				qcom,default-state = "on";
 				qcom,max-current = <20>;
 				qcom,ctrl-delay-us = <0>;
@@ -456,11 +504,8 @@
 		qcom,rpull-up-kohm = <100>;
 		qcom,vref-batt-therm = <1800000>;
 
-		/include/ "batterydata-h2a-4v35-LG.dtsi"
-		/include/ "batterydata-h2a-4v35-SAMSUNG.dtsi"
-		/include/ "batterydata-h2a-4v35-SONY.dtsi"
-		/include/ "batterydata-h2a-4v35-GUANGYU.dtsi"
-		/include/ "batterydata-h2a-4v35-SAMSUNG_a.dtsi"
+		/include/ "batterydata-h3lte-4v35-CosLight.dtsi"
+		/include/ "batterydata-h3lte-4v35-Delsa.dtsi"
 	};
 };
 
@@ -513,7 +558,6 @@
 	};
 
 	gpio@c500 { /* GPIO 6 */
-	qcom,vin-sel = <3>;
 	};
 
 	gpio@c600 { /* GPIO 7 */
@@ -554,13 +598,13 @@
 	};
 
 	mpp@a700 { /* MPP 8 */
-	};
-};
-
-&slim_msm {
-	tapan_codec {
-		qcom,cdc-micbias1-ext-cap;
-		qcom,cdc-micbias3-ext-cap;
+		reg = <0xa700 0x100>;
+		qcom,pin-num = <8>;
+		qcom,mode = <2>;
+		qcom,vin-sel = <1>;
+		qcom,pull = <1>;
+		qcom,invert = <0>;
+		qcom,master-en = <1>;
 	};
 };
 
@@ -575,6 +619,11 @@
 		qcom,hw-settle-time = <2>;
 		qcom,fast-avg-setup = <0>;
 	};
+};
+
+&android_usb {
+	qcom,android-usb-cdrom;
+	qcom,android-usb-internal-ums;
 };
 
 &mdss_mdp {
